@@ -6,7 +6,17 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const ingredients = document.getElementById('search').value;
         const cuisine = document.getElementById('cuisine').value;
-
+		
+		if (!ingredients) {
+                alert('Please enter atleast one ingredient'); 
+                event.preventDefault();
+            }
+		
+		if(!cuisine) {
+                alert('Please select a cuisine'); 
+                event.preventDefault();
+            }
+			
         callAPI(ingredients, cuisine)
             .then(data => {
                 const recipes = JSON.parse(data.body);
