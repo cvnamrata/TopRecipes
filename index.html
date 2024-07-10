@@ -5,18 +5,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Food Finder</title>
+    <title>Recipe Finder</title>
 </head>
 <body>
     <div class="container">
-        <h1>Top Recipies</h1>
+        <header>
+            <img src="Top Recipes Logo.jpg" alt="Top Recipes Logo" class="logo">
+            <h1>Top Recipes</h1>
+        </header>
         <form name="frm" id="frm">
             <input type="text" id="search" placeholder="Enter ingredients">
+            <select id="cuisine" class="dropdown">
+                <option value="" disabled selected>Select Cuisine Type</option>
+                <option value="American">American</option>
+                <option value="Asian">Asian</option>
+                <option value="British">British</option>
+                <option value="Caribbean">Caribbean</option>
+                <option value="Central Europe">Central Europe</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Eastern Europe">Eastern Europe</option>
+                <option value="French">French</option>
+                <option value="Indian">Indian</option>
+                <option value="Italian">Italian</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Kosher">Kosher</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Middle Eastern">Middle Eastern</option>
+                <option value="Nordic">Nordic</option>
+                <option value="South American">South American</option>
+                <option value="South East Asian">South East Asian</option>
+            </select>
             <button type="submit" id="submit" class="btn">Search</button>
         </form>
         <div id="results"></div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

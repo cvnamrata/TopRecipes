@@ -1,33 +1,75 @@
-// const searchForm = document.getElementById("form");//document.querySelector('form');
-let searchForm = document.getElementById("frm");
-const searchInput = document.querySelector('#search');
-const resultsList = document.querySelector('#results');
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('frm');
+    const resultsContainer = document.getElementById('results');
 
-searchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    searchRecipes();
-})
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const ingredients = document.getElementById('search').value;
+        const cuisine = document.getElementById('cuisine').value;
 
-async function searchRecipes() {
-    const searchValue = searchInput.value.trim();
-    const response = await fetch(`https://api.edamam.com/search?q=${searchValue}&app_id=676e7141&app_key=4111317a79af0fd9e2d7d017ff34dd1a&from=0&to=10`);
-    const data = await response.json();
-    displayRecipes(data.hits);
-}
+        callAPI(ingredients, cuisine)
+            .then(data => {
+                const recipes = JSON.parse(data.body);
+                if (Array.isArray(recipes)) {
+                    displayResults(recipes);
+                } else {
+                    console.error('API response is not an array:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
 
-function displayRecipes(recipes) {
-    let html = '';
-    recipes.forEach((recipe) => {
-        html += `
-        <div>
-            <img src="${recipe.recipe.image}" alt="${recipe.recipe.label}">
-            <h3>${recipe.recipe.label}</h3>
-            <ul>
-                ${recipe.recipe.ingredientLines.map(ingredient => `<li>${ingredient}</li>`).join('')}
-            </ul>
-            <a href="${recipe.recipe.url}" target="_blank">View Recipe</a>
-        </div> 
-        `
-    })
-    resultsList.innerHTML = html;
-}
+    function callAPI(ingredients, cuisine) {
+        console.log('Calling API with ingredients:', ingredients, 'and cuisine:', cuisine);
+        return fetch('https://3o8ofo9edh.execute-api.us-east-1.amazonaws.com/WebAppStage', { // Replace with your API Gateway endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ingredients: ingredients, cuisine: cuisine })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        });
+    }
+
+    function displayResults(recipes) {
+        console.log('Recipes:', recipes);
+        resultsContainer.innerHTML = '';
+        recipes.forEach(recipe => {
+            const recipeDiv = document.createElement('div');
+            recipeDiv.classList.add('recipe');
+
+            const recipeImage = document.createElement('img');
+            recipeImage.src = recipe.image;
+            recipeImage.alt = recipe.label;
+
+            const recipeTitle = document.createElement('h3');
+            recipeTitle.textContent = recipe.label;
+
+            const recipeIngredients = document.createElement('ul');
+            recipe.ingredients.forEach(ingredient => {
+                const ingredientItem = document.createElement('li');
+                ingredientItem.textContent = ingredient;
+                recipeIngredients.appendChild(ingredientItem);
+            });
+
+            const recipeLink = document.createElement('a');
+            recipeLink.href = recipe.url;
+            recipeLink.textContent = 'View Recipe';
+            recipeLink.target = '_blank';
+
+            recipeDiv.appendChild(recipeImage);
+            recipeDiv.appendChild(recipeTitle);
+            recipeDiv.appendChild(recipeIngredients);
+            recipeDiv.appendChild(recipeLink);
+
+            resultsContainer.appendChild(recipeDiv);
+        });
+    }
+});
