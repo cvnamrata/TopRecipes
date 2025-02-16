@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function callAPI(ingredients, cuisine) {
         console.log('Calling API with ingredients:', ingredients, 'and cuisine:', cuisine);
-        return fetch('https://a4wufzd912.execute-api.us-east-1.amazonaws.com/dev', { // Replace with your API Gateway endpoint
+        return fetch('https://qcvwv8m5yl.execute-api.us-east-1.amazonaws.com/webappstage/my-resource', { // Replace with your API Gateway endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
